@@ -1,0 +1,13 @@
+  # Fichiers de sauvegarde
+  *.old
+  *.bak
+  *.exemple
+
+  # Résultats de build Nix
+  result
+  result-*
+
+  # Secrets
+  secrets/
+  *.age
+  *.pem
