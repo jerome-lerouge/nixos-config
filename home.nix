@@ -252,6 +252,9 @@
     };
   };
 
+  # SSH agent - gère les clés SSH en session utilisateur
+  services.ssh-agent.enable = true;
+
   # You can update home Manager without chnaging this value.
   home.stateVersion = "24.11";
 
