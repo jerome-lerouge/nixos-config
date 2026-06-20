@@ -178,7 +178,7 @@
           format.enable = true;
           lsp.enable = true;
           # lsp.package = pkgs.elixir-ls;
-          lsp.servers = ["elixirls"];
+          lsp.servers = ["elixir-ls"];
           treesitter.enable = true;
         };
 

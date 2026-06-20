@@ -4,14 +4,13 @@
 {
   config,
   pkgs,
+  lib, # pour gestion du bug OPenLdap 27/O4/26
   ...
 }: {
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
   ];
-
-  #nixpkgs.overlays = [(import .overlays/claude-code.nix)];
 
   # Enable the Flakes feature
   nix.settings.experimental-features = ["nix-command" "flakes"];
@@ -52,6 +51,10 @@
     LC_TELEPHONE = "fr_FR.UTF-8";
     LC_TIME = "fr_FR.UTF-8";
   };
+
+  # Pour la gestion du problème décrit ici :
+  # https://discourse.nixos.org/t/would-it-be-feasible-to-make-dbus-broker-the-default-dbus-implementation-implemented/41760/20
+  services.dbus.implementation = "dbus";
 
   # Enable the X11 windowing system.
   services.xserver.enable = true;
@@ -109,6 +112,16 @@
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
+
+  # Test de gestion du bug OpenLDAP du 27/04/26
+  nixpkgs.overlays = [
+    # Disable openldap tests on i686 to fix build (https://github.com/NixOS/nixpkgs/issues/513245)
+    (_final: prev: {
+      openldap = prev.openldap.overrideAttrs {
+        doCheck = !prev.stdenv.hostPlatform.isi686;
+      };
+    })
+  ];
 
   # Test l'importation # overlays/claude-cdesktop.nix
   #overlays = [(import ./overlays/claude-code.nix)];
