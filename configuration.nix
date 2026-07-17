@@ -112,9 +112,9 @@
 
   # Enable Steam.
   # Disable until correction of package python3.14-patool
-  # programs.steam = {
-  #   enable = false;
-  # };
+  programs.steam = {
+    enable = false;
+  };
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
