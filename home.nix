@@ -74,15 +74,6 @@
   };
 
   # Basic configuration of git
-  #  programs.git = {
-  #    enable = true;
-  #    userName = "Jérôme Lerouge";
-  #    userEmail = "jerome.lerouge@gmail.com";
-  #    extraConfig = {
-  #      init.defaultBranch = "main";
-  #    };
-  #  };
-  # New basic configuration of git for home monager
   programs.git = {
     enable = true;
     settings = {
@@ -130,23 +121,23 @@
         registers = "unnamedplus";
       };
 
-      assistant = {
-        #  neocodeium = {
-        # enable = true;
-        # keymaps.accept = "ga";
-        # };
-        avante-nvim = {
-          enable = true;
-          setupOpts = {
-            provider = "gemini";
-            providers = {
-              gemini = {
-                model = "gemini-2.5-flash";
-              };
-            };
-          };
-        };
-      };
+      #assistant = {
+      #  #  neocodeium = {
+      #  # enable = true;
+      #  # keymaps.accept = "ga";
+      #  # };
+      #  avante-nvim = {
+      #    enable = true;
+      #    setupOpts = {
+      #      provider = "gemini";
+      #      providers = {
+      #        gemini = {
+      #          model = "gemini-2.5-flash";
+      #        };
+      #      };
+      #    };
+      #  };
+      #};
 
       lsp = {
         enable = true;
