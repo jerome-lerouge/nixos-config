@@ -110,16 +110,44 @@
   # Install firefox.
   programs.firefox.enable = true;
 
+  # Enable Steam.
+  # Disable until correction of package python3.14-patool
+  # programs.steam = {
+  #   enable = false;
+  # };
+
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
-  # Test de gestion du bug OpenLDAP du 27/04/26
+  ## Test de gestion du bug OpenLDAP du 27/04/26
+  #nixpkgs.overlays = [
+  #  # Disable openldap tests on i686 to fix build (https://github.com/NixOS/nixpkgs/issues/513245)
+  #  (_final: prev: {
+  #    openldap = prev.openldap.overrideAttrs {
+  #      doCheck = !prev.stdenv.hostPlatform.isi686;
+  #    };
+  #  })
+  #];
+
+  # Test de correction du bug patool
+  # Source : https://github.com/NixOS/nixpkgs/pull/540742
   nixpkgs.overlays = [
-    # Disable openldap tests on i686 to fix build (https://github.com/NixOS/nixpkgs/issues/513245)
-    (_final: prev: {
-      openldap = prev.openldap.overrideAttrs {
-        doCheck = !prev.stdenv.hostPlatform.isi686;
-      };
+    (final: prev: {
+      python314Packages = prev.python314Packages.overrideScope (
+        pyFinal: pyPrev: {
+          patool = pyPrev.patool.override {
+            file = prev.file.overrideAttrs {
+              # Work around too strict landlock hardening
+              # https://bugs.astron.com/view.php?id=785
+              postPatch = ''
+                substituteInPlace src/landlock.c --replace-fail \
+                  "LANDLOCK_ACCESS_FS_READ_FILE | LANDLOCK_ACCESS_FS_READ_DIR" \
+                  "LANDLOCK_ACCESS_FS_READ_FILE | LANDLOCK_ACCESS_FS_READ_DIR | LANDLOCK_ACCESS_FS_EXECUTE"
+              '';
+            };
+          };
+        }
+      );
     })
   ];
 
